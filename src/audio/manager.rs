@@ -44,7 +44,7 @@ impl AudioManager {
         let (process_tx, process_rx) = unbounded::<Vec<f32>>();
 
         // Initialize DSP processor
-        let processor = Arc::new(AudioProcessor::new(config.clone())?);}
+        let processor = Arc::new(AudioProcessor::new(config.clone())?);
 
         // Start capture
         let capture = AudioCapture::new(&input_device, &stream_config, capture_tx)?;
