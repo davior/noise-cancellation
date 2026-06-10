@@ -1,0 +1,15 @@
+{
+  "sample_rate": 48000,
+  "buffer_size": 256,
+  "input_device": null,
+  "output_device": null,
+  "enable_ultrasonic_cancellation": true,
+  "enable_spectral_gating": true,
+  "filters": {
+    "high_pass_hz": 20.0,
+    "ultrasonic_lower_hz": 18000.0,
+    "ultrasonic_upper_hz": 48000.0,
+    "noise_gate_threshold": -40.0,
+    "spectral_floor": -80.0
+  }
+}
