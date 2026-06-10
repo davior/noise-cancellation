@@ -1,26 +1,33 @@
-use cpal::traits::{DeviceTrait, StreamTrait};
+use cpal::traits::{DeviceTrait, StreamTrait, HostTrait};
 use cpal::{Device, Stream, StreamConfig};
 use crossbeam_channel::Sender;
 use anyhow::Result;
 
 /// Audio capture thread that reads from input device
 pub struct AudioCapture {
-    stream: Option<Stream>,
+    stream: Stream,
     config: StreamConfig,
 }
 
 impl AudioCapture {
     pub fn new(device: &Device, config: &StreamConfig, tx: Sender<Vec<f32>>) -> Result<Self> {
-        let config_clone = config.clone();
+        let tx = std::sync::Arc::new(std::sync::Mutex::new(tx));
+        let tx_clone = tx.clone();
         
         let stream = device.build_input_stream(
             config,
-            move |data: &cpal::InputBuffer, _: &cpal::InputCallbackInfo| {
-                // Convert input samples to f32 and send to processing pipeline
-                let samples: Vec<f32> = data.as_slice().iter().map(|s| *s as f32).collect();
-                let _ = tx.try_send(samples); // Non-blocking send
+            move |data: &cpal::InputBuffer, _info: &cpal::InputCallbackInfo| {
+                let samples: Vec<f32> = data
+                    .as_slice()
+                    .iter()
+                    .map(|&s| s as f32 / 32768.0)
+                    .collect();
+                
+                if let Ok(tx) = tx_clone.lock() {
+                    let _ = tx.try_send(samples);
+                }
             },
-            |err| {
+            move |err| {
                 tracing::error!("Audio capture error: {}", err);
             },
             None,
@@ -30,26 +37,19 @@ impl AudioCapture {
         tracing::info!("Audio capture started");
 
         Ok(AudioCapture {
-            stream: Some(stream),
-            config: config_clone,
+            stream,
+            config: config.clone(),
         })
     }
 
     pub fn config(&self) -> &StreamConfig {
         &self.config
     }
-
-    pub fn stop(&mut self) -> Result<()> {
-        if let Some(stream) = self.stream.take() {
-            stream.pause()?;
-            tracing::info!("Audio capture stopped");
-        }
-        Ok(())
-    }
 }
 
 impl Drop for AudioCapture {
     fn drop(&mut self) {
-        let _ = self.stop();
+        let _ = self.stream.pause();
+        tracing::info!("Audio capture stopped");
     }
 }
