@@ -23,6 +23,7 @@ impl AudioCapture {
             |err| {
                 tracing::error!("Audio capture error: {}", err);
             },
+            None,
         )?;
 
         stream.play()?;

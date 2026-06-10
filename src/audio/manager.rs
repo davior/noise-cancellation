@@ -3,7 +3,7 @@ use crate::config::Config;
 use crate::dsp::AudioProcessor;
 use anyhow::Result;
 use cpal::StreamConfig;
-use crossbeam_channel::{unbounded, Sender, Receiver};
+use crossbeam_channel::unbounded;
 use std::thread;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};

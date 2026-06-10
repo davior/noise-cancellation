@@ -83,13 +83,13 @@ impl eframe::App for App {
                 
                 ui.horizontal(|ui| {
                     ui.label("Noise Gate Threshold (dB):");
-                    ui.slider_range(&mut self.noise_gate_threshold, -80.0..=-20.0);
+                    ui.add(Slider::new(&mut self.noise_gate_threshold, -80.0..=-20.0));
                     ui.label(format!("{:.1}", self.noise_gate_threshold));
                 });
 
                 ui.horizontal(|ui| {
                     ui.label("High-Pass Cutoff (Hz):");
-                    ui.slider_range(&mut self.high_pass_freq, 10.0..=200.0);
+                    ui.add(Slider::new(&mut self.high_pass_freq, 10.0..=200.0));
                     ui.label(format!("{:.1}", self.high_pass_freq));
                 });
             });

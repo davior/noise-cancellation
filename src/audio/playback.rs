@@ -43,6 +43,7 @@ impl AudioPlayback {
             |err| {
                 tracing::error!("Audio playback error: {}", err);
             },
+            None,
         )?;
 
         stream.play()?;

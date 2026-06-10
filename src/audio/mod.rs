@@ -4,9 +4,9 @@ pub mod manager;
 
 pub use manager::AudioManager;
 
-use crate::config::Config;
 use anyhow::Result;
 use cpal::Device;
+use cpal::traits::HostTrait;
 
 /// List all available audio input devices
 pub fn list_input_devices() -> Result<Vec<String>> {
