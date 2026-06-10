@@ -14,8 +14,8 @@ pub fn list_input_devices() -> Result<Vec<String>> {
     let mut devices = Vec::new();
     
     for device in host.input_devices()? {
-        if let Ok(name) = device.name() {
-            devices.push(name);
+        if let Ok(desc) = device.description() {
+            devices.push(desc.name().to_string());
         }
     }
     
@@ -28,8 +28,8 @@ pub fn list_output_devices() -> Result<Vec<String>> {
     let mut devices = Vec::new();
     
     for device in host.output_devices()? {
-        if let Ok(name) = device.name() {
-            devices.push(name);
+        if let Ok(desc) = device.description() {
+            devices.push(desc.name().to_string());
         }
     }
     
@@ -46,8 +46,8 @@ pub fn get_device_by_name(name: &str, is_input: bool) -> Result<Device> {
     };
     
     for device in devices {
-        if let Ok(device_name) = device.name() {
-            if device_name == name {
+        if let Ok(desc) = device.description() {
+            if desc.name() == name {
                 return Ok(device);
             }
         }
