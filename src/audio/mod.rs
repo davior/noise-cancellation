@@ -6,7 +6,7 @@ pub use manager::AudioManager;
 
 use anyhow::Result;
 use cpal::Device;
-use cpal::traits::HostTrait;
+use cpal::traits::{HostTrait, DeviceTrait};
 
 /// List all available audio input devices
 pub fn list_input_devices() -> Result<Vec<String>> {

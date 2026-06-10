@@ -6,12 +6,13 @@ use anyhow::Result;
 
 pub fn run_app(audio_manager: AudioManager) -> Result<()> {
     let native_options = eframe::NativeOptions::default();
-    let app = app::App::new(audio_manager);
     
     let _ = eframe::run_native(
         "Noise Cancellation",
         native_options,
-        Box::new(|_cc| Ok(Box::new(app))),
+        Box::new(move |_cc| {
+            Box::new(app::App::new(audio_manager))
+        }),
     );
 
     Ok(())
