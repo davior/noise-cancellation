@@ -1,0 +1,45 @@
+[package]
+name = "noise-cancellation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Audio I/O - cross-platform real-time audio
+cpal = "0.18"
+
+# DSP and signal processing
+dasp = { version = "0.11", features = ["interpolate-linear"] }
+rustfft = "6.1"
+
+# GUI - lightweight, immediate-mode UI framework
+egui = "0.27"
+eframe = "0.27"
+egui-winit = "0.27"
+
+# Threading and async
+crossbeam = "0.8"
+crossbeam-channel = "0.5"
+
+# Serialization for configuration
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "audio_processing"
+harness = false
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
