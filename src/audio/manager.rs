@@ -25,7 +25,7 @@ impl AudioManager {
         // Setup stream config
         let stream_config = StreamConfig {
             channels: 1,
-            sample_rate: cpal::SampleRate(config.sample_rate),
+            sample_rate: config.sample_rate,
             buffer_size: cpal::BufferSize::Fixed(config.buffer_size as u32),
         };
 
